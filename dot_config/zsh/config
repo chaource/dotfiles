@@ -1,0 +1,76 @@
+################################################################################
+# source this file in the ~/.zshrc.local in order to use this common conf      #
+# while still allowing overriding of some features on a per machine basis.     #
+################################################################################
+
+## Prompt theme extension ##
+
+# Virtualenv support
+function virtual_env_prompt () {
+    REPLY=${VIRTUAL_ENV+(${VIRTUAL_ENV:t}) }
+}
+grml_theme_add_token  virtual-env -f virtual_env_prompt '%F{magenta}' '%f'
+
+# mephi support
+function mephi_env_prompt () {
+    REPLY=${MEPHI_PROJECT+[${MEPHI_PROJECT:t}] }
+}
+grml_theme_add_token  mephi-env -f mephi_env_prompt '%F{red}' '%f'
+
+# netns support
+function netns_env_prompt () {
+	NETNS_ENV="$(ip netns identify $$)"
+	if [[ ! -z $NETNS_ENV ]]; then
+    	REPLY=${NETNS_ENV+[${NETNS_ENV:t}] }
+	fi
+}
+grml_theme_add_token  netns-env -f netns_env_prompt '%F{green}' '%f'
+
+
+
+# prompt definition
+zstyle ':prompt:grml:left:setup' items rc netns-env mephi-env virtual-env change-root user at host path vcs percent
+
+# aliases
+alias vi=nvim
+alias vim=nvim
+
+# fzf
+export FZF_DEFAULT_OPTS='--height 100% --reverse'
+export FZF_DEFAULT_COMMAND='rg -l ""'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# fshow - git commit browser
+fshow() {
+  git log --graph --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --preview "echo {} | grep -o '[a-f0-9]\{7\}' | head -1 |
+                 xargs -I % sh -c 'git show --color=always % | head -$LINES'" \
+      --bind "ctrl-m:execute:
+                (grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+                {}
+FZF-EOF"
+}
+
+# checkout most recent branches (top 30)
+fbr() {
+  local branches branch
+  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+if [ -n "$DISPLAY" ]; then
+  xset b off
+fi
+
+export PATH=~/.local/bin:$PATH
+
+# virtualenvs
+WORKON_HOME="~/.venvs"
+VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+
+# vim:ft=sh

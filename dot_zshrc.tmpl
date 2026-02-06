@@ -1,0 +1,15 @@
+# Created by newuser for 5.9
+. "{{ .chezmoi.homeDir }}/.deno/env"
+export PATH="$PATH:{{ .chezmoi.homeDir }}/.dotnet/tools"
+
+# fnm
+FNM_PATH="{{ .chezmoi.homeDir }}/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="{{ .chezmoi.homeDir }}/.local/share/fnm:$PATH"
+  eval "`fnm env`"
+fi
+
+eval "$(fnm env --use-on-cd --shell zsh)"
+
+# opencode
+export PATH={{ .chezmoi.homeDir }}/.opencode/bin:$PATH

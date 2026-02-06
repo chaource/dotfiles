@@ -1,0 +1,5 @@
+configuration {
+	font: "Fira Mono 16";
+	show-icons: true;
+}
+@theme "gruvbox-dark"
