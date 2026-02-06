@@ -1,13 +1,6 @@
 local utils = require('utils')
 
--- navigation
-utils.map('n', '<C-J>', '<C-W><C-J>')
-utils.map('n', '<C-K>', '<C-W><C-K>')
-utils.map('n', '<C-H>', '<C-W><C-H>')
-
-utils.map('n', '<C-L>', '<C-W><C-L>')
--- rely on copilot for this one in insert mode
-vim.keymap.set('i', '<C-l>', function() end)
+-- navigation (C-h/j/k/l handled by vim-tmux-navigator)
 
 utils.map('n', '<Leader>h', ':topleft vnew<CR>', { noremap = false })
 utils.map('n', '<Leader>l', ':botright vnew<CR>', { noremap = false })
