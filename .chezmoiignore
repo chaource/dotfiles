@@ -1,2 +1,5 @@
 README.md
 LICENSE
+.config/zsh/work
+.config/zsh/secrets
+.zshrc.semaphore

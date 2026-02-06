@@ -24,14 +24,18 @@ cmp.setup({
 			c = cmp.mapping.close(),
 		}),
 		['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-		-- ['<tab>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+		['<tab>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 	},
 	sources = cmp.config.sources({
+		{ name = 'copilot' },
 		{ name = 'nvim_lsp' },
 		{ name = 'luasnip' },
 	}, {
 		{ name = 'buffer' },
-	})
+	}),
+    experimental = {
+      ghost_text = true
+    }
 })
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
@@ -43,3 +47,11 @@ cmp.setup.cmdline(':', {
 		{ name = 'cmdline' }
 	})
 })
+
+cmp.event:on("menu_opened", function()
+  vim.b.copilot_suggestion_hidden = true
+end)
+
+cmp.event:on("menu_closed", function()
+  vim.b.copilot_suggestion_hidden = false
+end)

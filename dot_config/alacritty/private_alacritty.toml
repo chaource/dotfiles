@@ -1,3 +1,13 @@
+[[keyboard.bindings]]
+action = "Paste"
+key = "V"
+mods = "Control|Alt"
+
+[[keyboard.bindings]]
+action = "Copy"
+key = "C"
+mods = "Control|Alt"
+
 [colors.bright]
 black = "#928374"
 blue = "#83a598"
@@ -41,16 +51,6 @@ style = "Italic"
 family = "FiraMono Nerd Font"
 style = "Regular"
 
-[[keyboard.bindings]]
-action = "Paste"
-key = "V"
-mods = "Control|Alt"
-
-[[keyboard.bindings]]
-action = "Copy"
-key = "C"
-mods = "Control|Alt"
-
 [window]
 dynamic_padding = true
 dynamic_title = true
@@ -59,7 +59,4 @@ dynamic_title = true
 x = 8
 y = 0
 
-# [[keyboard.bindings]]
-# key = "Return"
-# mods = "Shift"
-# chars = "\x1b\r"
+[keyboard]

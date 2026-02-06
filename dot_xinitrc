@@ -1,17 +1,14 @@
-
 if [ -f ~/.Xresources ]; then
 	xrdb -merge ~/.Xresources
 fi
 
 # set compose key
-/usr/bin/xset r rate 150 50
-/usr/bin/setxkbmap -option compose:caps
+xset r rate 150 50
+setxkbmap -option "compose:caps"
 
 # set the background
 if [ -f /usr/bin/feh ]; then
     feh --bg-scale ~/.wallpaper.jpg &
 fi
-
-systemctl --user import-environment DISPLAY
 
 exec i3

@@ -12,15 +12,6 @@ local function nvim_create_augroups(groups)
 end
 
 local augroups = {
-	packer = {
-		{
-			event = "BufWritePost",
-			opts = {
-				pattern = "plugins.lua",
-				command = "PackerCompile"
-			}
-		};
-	};
 	restore_cursor = {
 		{
 			event = 'BufRead',
@@ -30,13 +21,14 @@ local augroups = {
 			}
 		};
 	};
-	autoformat = {
+	markdown_settings = {
 		{
-			event = 'BufWritePre',
+			event = 'FileType',
 			opts = {
-				pattern = { '*.rs', '*.lua' },
+				pattern = 'markdown',
 				callback = function()
-					vim.lsp.buf.format()
+					vim.opt_local.conceallevel = 1
+					vim.opt_local.concealcursor = ''
 				end
 			}
 		};
@@ -45,21 +37,22 @@ local augroups = {
 
 nvim_create_augroups(augroups)
 
--- open nvim-tree for folders
--- local function open_nvim_tree(data)
+vim.api.nvim_create_user_command("FzfUnstaged", function()
+  local fzf_opts = {
+    source = "git status --porcelain | grep '^.M' | cut -c4-",
+    sink = function(line)
+      if line and #line > 0 then
+        vim.cmd("edit " .. line)
+      end
+    end,
+    options = {
+      "--multi",
+      "--prompt=Unstaged> ",
+      "--preview", "bat --style=numbers --color=always {}",
+      "--preview-window", "right:60%",
+    }
+  }
 
---     -- buffer is a directory
---     local directory = vim.fn.isdirectory(data.file) == 1
-
---     if not directory then
---         return
---     end
-
---     -- change to the directory
---     vim.cmd.cd(data.file)
-
---     -- open the tree
---     require("nvim-tree.api").tree.open()
--- end
-
--- vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
+  local wrapped = vim.fn["fzf#wrap"]("unstaged_files", fzf_opts, false)
+  vim.fn["fzf#run"](wrapped)
+end, {})

@@ -1,0 +1,12 @@
+xsource $HOME/.config/zsh/config
+
+setopt magic_equal_subst
+bindkey '^n' autosuggest-accept
+
+export SSH_AUTH_SOCK=$XDG_RUNTIME_DIR/ssh-agent.socket
+
+{{ if eq .chezmoi.hostname "mycena" -}}
+xsource ~/.config/zsh/work
+{{ else -}}
+eval "$(fnm env --use-on-cd --shell zsh)"
+{{ end -}}

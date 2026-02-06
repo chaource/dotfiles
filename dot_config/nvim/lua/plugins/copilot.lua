@@ -1,0 +1,38 @@
+return {
+  -- {
+  --     "zbirenbaum/copilot.lua",
+  --     dependencies = { "copilotlsp-nvim/copilot-lsp" },
+  --     config = function()
+  --     require('copilot').setup({
+  --     suggestion = {
+  --       enabled = false,
+  --       -- auto_trigger = true,
+  --       -- debounce = 75,
+  --       -- keymap = {
+  --       --   accept = "<C-n>",
+  --       --   accept_word = "<C-w>",
+  --       --   accept_line = "<C-Enter>",
+  --       --   next = "<M-]>",
+  --       --   prev = "<M-[>",
+  --       --   dismiss = "<C-]>",
+  --       -- },
+  --     },
+  --     panel = { enabled = false },
+  --     -- nes = {
+  --     --   enabled = true,
+  --     --   keymap = {
+  --     --     accept_and_goto = "<A-l>",
+  --     --     accept = false,
+  --     --     dismiss = "<Esc>",
+  --     --   },
+  --     -- },
+  --   })
+  -- end
+  -- },
+  -- {
+  --   "zbirenbaum/copilot-cmp",
+  --   config = function ()
+  --       require("copilot_cmp").setup()
+  --   end
+  -- }
+}

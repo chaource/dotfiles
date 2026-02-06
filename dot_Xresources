@@ -11,6 +11,7 @@ URxvt.font: xft:Fira Mono:size=14, xft:Symbola:pixelsize=14:antialias=true:autoh
 URxvt.scrollBar: false
 URxvt.internalBorder: 16
 URxvt.perl-ext-common: font-size
+Xcursor.size: 32
 
 
 ! hard contrast: *background: #1d2021

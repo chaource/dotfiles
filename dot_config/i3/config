@@ -36,12 +36,7 @@ client.unfocused        $darkgray $darkgray $gray $darkgray $darkgray
 client.urgent           $red $red $white $red $red
 
 # Android emulator
-for_window [title="Android Emulator -.*"] floating enable
-for_window [title="winit window"] floating enable
-# for_window [class="Wine"] floating enable
-# for_window [title=".*\.vst3?"] floating enable
-# focus_follows_mouse no
-# mouse_warping none
+for_window [class="Emulator"] floating enable
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
@@ -95,6 +90,10 @@ bindsym $mod+$alt+Left move workspace to output left
 bindsym $mod+$alt+h move workspace to output left
 bindsym $mod+$alt+Right move workspace to output right
 bindsym $mod+$alt+l move workspace to output right
+bindsym $mod+$alt+Up move workspace to output up
+bindsym $mod+$alt+k move workspace to output up
+bindsym $mod+$alt+Down move workspace to output down
+bindsym $mod+$alt+j move workspace to output down
 
 # split in horizontal orientation
 # bindsym $mod+h split h
@@ -196,15 +195,35 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 exec_always --no-startup-id $HOME/.config/i3/polybar.sh
+
 exec_always --no-startup-id /usr/bin/picom --config ~/.config/compton/compton.conf
-#exec_always --no-startup-id /usr/bin/feh --bg-fill ~/.wallpaper.jpg
-#exec_always --no-startup-id /usr/bin/xset r rate 150 50
-#exec_always --no-startup-id /usr/bin/setxkbmap -option compose:caps
+exec_always --no-startup-id /usr/bin/feh --bg-fill ~/.wallpaper.jpg
+exec_always --no-startup-id /usr/bin/xset r rate 150 50
+
+# capslock is compose key
+exec_always --no-startup-id /usr/bin/setxkbmap -option compose:caps
 
 bindsym Control+$alt+l exec "i3lock -c 282828"
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +2%; exec pactl set-sink-mute @DEFAULT_SINK@ 0
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -2%; exec pactl set-sink-mute @DEFAULT_SINK@ 0
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86MonBrightnessUp exec light -A 10
-bindsym XF86MonBrightnessDown exec light -U 10
+bindsym XF86MonBrightnessUp exec brightnessctl s +10%
+bindsym XF86MonBrightnessDown exec brightnessctl s 10%-
+
+# Screenshot with flameshot
+bindsym Print exec --no-startup-id flameshot gui
+
+# Todoist scratchpad configuration
+# Mark Todoist window for scratchpad
+# for_window [class="Todoist"] floating enable, move scratchpad, resize set 1200 800, move position center
+
+# # Toggle Todoist scratchpad with mod+t
+# bindsym $mod+t [class="Todoist"] scratchpad show, move position center
+# # Fallback: start Todoist if not running
+# bindsym $mod+Shift+t exec --no-startup-id ~/.local/bin/todoist
+
+# # Auto-start Todoist at login (will auto-hide in scratchpad)
+# exec --no-startup-id ~/.local/bin/todoist
+
+bindsym $mod+t exec --no-startup-id ~/.local/bin/tmux-rofi

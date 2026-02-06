@@ -34,11 +34,17 @@ zstyle ':prompt:grml:left:setup' items rc netns-env mephi-env virtual-env change
 # aliases
 alias vi=nvim
 alias vim=nvim
+alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 # fzf
 export FZF_DEFAULT_OPTS='--height 100% --reverse'
 export FZF_DEFAULT_COMMAND='rg -l ""'
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+xsource /usr/share/fzf/completion.zsh
+xsource /usr/share/fzf/key-bindings.zsh
+
+# autosuggestions
+xsource /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # fshow - git commit browser
 fshow() {
@@ -61,6 +67,14 @@ fbr() {
   branch=$(echo "$branches" |
            fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
   git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+dockerip() {
+  if [ -z "$1" ]; then
+    echo "Usage: dockerip <container_name_or_id>"
+    return 1
+  fi
+  docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$1"
 }
 
 if [ -n "$DISPLAY" ]; then
