@@ -1,0 +1,7 @@
+worktree-path = "~/worktrees/{{ repo }}/{{ branch | sanitize }}"
+
+[post-create]
+tmux = "tmux new-session -d -s '{{ branch | sanitize }}' -c '{{ worktree_path }}'"
+
+[pre-remove]
+tmux = "tmux kill-session -t '{{ branch | sanitize }}' 2>/dev/null || true"
