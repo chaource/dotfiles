@@ -11,4 +11,6 @@ if [ -f /usr/bin/feh ]; then
     feh --bg-scale ~/.wallpaper.jpg &
 fi
 
+systemctl --user import-environment DISPLAY
+
 exec i3
