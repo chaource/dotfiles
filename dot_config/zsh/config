@@ -26,15 +26,17 @@ function netns_env_prompt () {
 }
 grml_theme_add_token  netns-env -f netns_env_prompt '%F{green}' '%f'
 
-
-
 # prompt definition
 zstyle ':prompt:grml:left:setup' items rc netns-env mephi-env virtual-env change-root user at host path vcs percent
+
+# worktree completion
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init bash)"; fi
 
 # aliases
 alias vi=nvim
 alias vim=nvim
-alias dot='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias wts='wt switch -x "tmux attach -t {{ branch | sanitize }} 2>/dev/null || tmux new -s {{ branch | sanitize }}"'
+alias wtn='wt switch --create -x "tmux attach -t {{ branch | sanitize }} 2>/dev/null || tmux new -s {{ branch | sanitize }}"'
 
 # fzf
 export FZF_DEFAULT_OPTS='--height 100% --reverse'
