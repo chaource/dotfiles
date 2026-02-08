@@ -30,7 +30,7 @@ grml_theme_add_token  netns-env -f netns_env_prompt '%F{green}' '%f'
 zstyle ':prompt:grml:left:setup' items rc netns-env mephi-env virtual-env change-root user at host path vcs percent
 
 # worktree completion
-if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init bash)"; fi
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
 
 # aliases
 alias vi=nvim
