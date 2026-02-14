@@ -10,16 +10,3 @@ xsource ~/.config/zsh/work
 {{ else -}}
 eval "$(fnm env --use-on-cd --shell zsh)"
 {{ end -}}
-
-if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
-
-wn() {
-    local name="$1"; shift
-    wt switch -c "$name" "$@"
-    local sanitized="${name//\//-}"
-    if [[ -n "$TMUX" ]]; then
-        tmux switch-client -t "$sanitized"
-    else
-        tmux attach-session -t "$sanitized"
-    fi
-}
