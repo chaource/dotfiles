@@ -38,6 +38,17 @@ alias vim=nvim
 alias wts='wt switch -x "tmux attach -t {{ branch | sanitize }} 2>/dev/null || tmux new -s {{ branch | sanitize }}"'
 alias wtn='wt switch --create -x "tmux attach -t {{ branch | sanitize }} 2>/dev/null || tmux new -s {{ branch | sanitize }}"'
 
+wn() {
+    local name="$1"; shift
+    wt switch -c "$name" "$@"
+    local sanitized="${name//\//-}"
+    if [[ -n "$TMUX" ]]; then
+        tmux switch-client -t "$sanitized"
+    else
+        tmux attach-session -t "$sanitized"
+    fi
+}
+
 # fzf
 export FZF_DEFAULT_OPTS='--height 100% --reverse'
 export FZF_DEFAULT_COMMAND='rg -l ""'
