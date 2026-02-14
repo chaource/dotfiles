@@ -36,9 +36,7 @@ if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)
 alias vi=nvim
 alias vim=nvim
 alias wts='wt switch -x "tmux attach -t {{ branch | sanitize }} 2>/dev/null || tmux new -s {{ branch | sanitize }}"'
-alias wtn='wt switch --create -x "tmux attach -t {{ branch | sanitize }} 2>/dev/null || tmux new -s {{ branch | sanitize }}"'
-
-wn() {
+wtn() {
     local name="$1"; shift
     wt switch -c "$name" "$@"
     local sanitized="${name//\//-}"
