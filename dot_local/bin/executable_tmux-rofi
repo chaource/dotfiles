@@ -1,0 +1,37 @@
+#!/bin/bash
+# tmux-rofi - Switch to tmux sessions via rofi, focusing the correct i3 window
+
+session=$(tmux list-sessions -F '#{session_name}' 2>/dev/null | rofi -dmenu -p "tmux")
+[[ -z "$session" ]] && exit 0
+
+focus_terminal() {
+    local pid="$1"
+    # xdotool windowactivate switches workspace AND focuses
+    local win_id
+    win_id=$(xdotool search --pid "$pid" 2>/dev/null | head -1)
+    [[ -n "$win_id" ]] && xdotool windowactivate "$win_id"
+}
+
+# Find client attached to THIS specific session
+client_tty=$(tmux list-clients -F '#{client_tty} #{session_name}' | grep " ${session}$" | awk '{print $1}')
+
+if [[ -n "$client_tty" ]]; then
+    # Session has its own terminal window - just focus it
+    tty_name="${client_tty#/dev/}"
+    terminal_pid=$(ps -t "$tty_name" -o ppid= | head -1 | tr -d ' ')
+    focus_terminal "$terminal_pid"
+else
+    # Session has no terminal - find ANY tmux terminal
+    any_client_tty=$(tmux list-clients -F '#{client_tty}' | head -1)
+
+    if [[ -n "$any_client_tty" ]]; then
+        # Found a tmux terminal - focus it and switch to session
+        tty_name="${any_client_tty#/dev/}"
+        terminal_pid=$(ps -t "$tty_name" -o ppid= | head -1 | tr -d ' ')
+        focus_terminal "$terminal_pid"
+        tmux switch-client -c "$any_client_tty" -t "$session"
+    else
+        # No tmux terminal at all - open new one
+        alacritty -e tmux attach-session -t "$session" &
+    fi
+fi
