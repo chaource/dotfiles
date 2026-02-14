@@ -5,3 +5,11 @@ tmux = "tmux new-session -d -s '{{ branch | sanitize }}' -c '{{ worktree_path }}
 
 [pre-remove]
 tmux = "tmux kill-session -t '{{ branch | sanitize }}' 2>/dev/null || true"
+
+[projects."github.com/getsemaphore/semaphore-api"]
+approved-commands = [
+    "touch {{ worktree_path }}/.stack && touch {{ primary_worktree_path }}/.tilt-stacks",
+    "rm -f {{ worktree_path }}/.stack && touch {{ primary_worktree_path }}/.tilt-stacks",
+    "tilt disable {{ branch | sanitize }} 2>/dev/null || true",
+    "{{ primary_worktree_path }}/scripts/cleanup-stack.sh topo-{{ branch | sanitize }} {{ primary_worktree_path }}/.docker-compose.{{ branch | sanitize }}.yml; docker exec topo-shared-temporal-1 temporal operator namespace delete -n stack-{{ branch | sanitize }} --address temporal:7233 --yes 2>/dev/null || true",
+]
